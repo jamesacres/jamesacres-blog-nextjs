@@ -536,3 +536,64 @@ I guess only way would be to change Atom Echo to stop streaming and start again 
 
 Turning off the living room one went from 50% to 30% for the two in Kitchen and Bedroom.
 
+
+
+
+
+
+
+Setting up SMLIGHT SLZB-06M over USB in Home Assistant Green
+Plug in USB cable
+Press small button on the device, took a couple of attempts for it to light up the blue LED which is USB mode.
+
+I added https://github.com/zigbee2mqtt/hassio-zigbee2mqtt addon repository
+In the addon store I then searched for zigbee and selected Zigbee2MQTT
+Then pressed install.
+Changing enabled to true in the config, and press start
+Code Server in terminal run ha hardware info
+I then see in the logs.
+Error: USB adapter discovery error (No valid USB adapter found). Specify valid 'adapter' and 'port' in your configuration.
+I tried to work out what the USB tty by-id was but couldn't find it!
+I gave up and plugged in an ethernet cable.
+At this point I can actually navigate to slzb-06m.local in the browser!
+At this point, Home Assistant also found discovered devices.
+I decided to remove Zigbee2MQTT and go with the default ZHA (Zigbee Home Automation) setup
+I also added the SMLIGHT SLZB integration which apparently offers some of the stuff from the web interface.
+This then prompted me to update the firmware which I did.
+Installed version
+v2.3.6.plus
+Latest version
+v2.7.0
+
+I pressed add new device which opened Zigbee pairing.
+I took the cover off my cube, pressed the button until the blue LED blinked.
+It appeared quickly and allowed me to set it up.
+I went to https://community.home-assistant.io/t/zha-xiaomi-cube-controller/495975
+and followed the instructions to add a numeric helper input.
+I imported the blueprint, then set the numeric helper and selected my cube.
+https://my.home-assistant.io/redirect/blueprint_import/?blueprint_url=https://github.com/SirGoodenough/HA_Blueprints/blob/master/Automations/ZHA-Xiaomi_Cube_Controller.yaml
+I renamed it to Kitchen Cube, it then appeared in my automations section.
+I tested shake, it worked! The living room lights toggled on and off!
+The other automations didn't work, I added Kitchen Cube Last to my dashboard and realised it was on 0. Also searching for zha_event only came up with shake. Opening cube and pressing the button 5 times quickly changed the mode and then it worked and updated when changing side.
+
+I used Double Tap with face x actions.
+(shake: transfer queue to living room, 1: music off, 2: play 6 music 3: play radio 1, 4: play greatest hits radio, 5: pitchfork best new music, 6: shuffle favourites )
+
+
+Clicking allows me to edit:
+
+
+I then remembered I want zigbee on channel 25. I edited it, this then seemed to disconnect everything, via the web interface I told it SLZB-06 to reboot.
+I couldn't get this to work so restored my old settings. Apparently repairing can be difficult.
+
+
+
+Create script to make an announcement
+https://community.home-assistant.io/t/how-would-you-setup-an-audio-announcement-system-with-ha/804011/2
+
+
+I changed the automation for the cube to only process shake.
+Then added new automations manually to react when the side of the cube changes.
+This way it only starts playing music when it actually changes.
+
+I made it announce the weather forecast and temperature! And say Good morning and day of week.
